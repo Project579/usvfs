@@ -155,19 +155,20 @@ SharedParameters *HookContext::retrieveParameters(const USVFSParameters &params)
 
 HookContext::ConstPtr HookContext::readAccess(const char*)
 {
-  BOOST_ASSERT(s_Instance != nullptr);
+	BOOST_ASSERT(s_Instance != nullptr);
 
-  // TODO: this should be a shared mutex!
-  s_Instance->m_Mutex.wait(200);
-  return ConstPtr(s_Instance, unlockShared);
+	//TODO: this lock should be smarter
+	s_Instance->m_Mutex.lock();
+	return ConstPtr(s_Instance, unlockShared);
 }
 
 HookContext::Ptr HookContext::writeAccess(const char*)
 {
-  BOOST_ASSERT(s_Instance != nullptr);
+	BOOST_ASSERT(s_Instance != nullptr);
 
-  s_Instance->m_Mutex.wait(200);
-  return Ptr(s_Instance, unlock);
+	//TODO: this lock should be smarter
+	s_Instance->m_Mutex.lock();
+	return Ptr(s_Instance, unlock);
 }
 
 void HookContext::setLogLevel(LogLevel level)
@@ -410,12 +411,14 @@ std::vector<std::future<int>> &HookContext::delayed()
 
 void HookContext::unlock(HookContext *instance)
 {
-  instance->m_Mutex.signal();
+	//TODO: this lock should be smarter
+	instance->m_Mutex.unlock();
 }
 
 void HookContext::unlockShared(const HookContext *instance)
 {
-  instance->m_Mutex.signal();
+	//TODO: this lock should be smarter
+	instance->m_Mutex.unlock();
 }
 
 extern "C" DLLEXPORT HookContext *__cdecl CreateHookContext(const USVFSParameters &params, HMODULE module)

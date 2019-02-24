@@ -572,8 +572,6 @@ struct Searches {
 
   Searches &operator=(const Searches &) = delete;
 
-  std::recursive_mutex queryMutex;
-
   std::map<HANDLE, Info> info;
 };
 

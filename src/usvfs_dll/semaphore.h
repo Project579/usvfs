@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <windows.h>
+#include <Windows.h>
 
 
 // based on code by Jeff Preshing
@@ -13,22 +13,23 @@
 
 class RecursiveBenaphore
 {
-
 public:
-  RecursiveBenaphore();
-  ~RecursiveBenaphore();
+	RecursiveBenaphore();
+	~RecursiveBenaphore();
 
-  // wait on the semaphore. after timeout this will check if the current owner
-  // thread is still alive and steal the semaphore if it isn't. Otherwise this
-  // will continue to wait.
-  void wait(DWORD timeout = INFINITE);
-  void signal();
+	// wait on the semaphore. after timeout this will check if the current owner
+	// thread is still alive and steal the semaphore if it isn't. Otherwise this
+	// will continue to wait.
+	//void wait(DWORD timeout = INFINITE);
+	//void signal();
+	void lock();
+	void unlock();
 
 private:
 
-  LONG m_Counter;
-  DWORD m_OwnerId;
-  int m_Recursion;
-  HANDLE m_Semaphore;
-
+	CRITICAL_SECTION m_mutex;
+	//LONG m_Counter;
+	//DWORD m_OwnerId;
+	//int m_Recursion;
+	//HANDLE m_Semaphore{};
 };

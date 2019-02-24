@@ -267,7 +267,8 @@ private:
 
   HMODULE m_DLLModule;
 
-  mutable RecursiveBenaphore m_Mutex;
+  //mutable RecursiveBenaphore m_Mutex;
+  mutable std::recursive_mutex m_Mutex;
 };
 }
 
